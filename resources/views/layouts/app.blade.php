@@ -43,6 +43,7 @@
     <div>
         <a href="{{ route('home') }}">Головна</a>
         <a href="{{ route('players.index') }}">Гравці</a>
+        <a href="{{ route('tournaments.index') }}">Турніри</a>
         <a href="{{ route('news.index') }}">Новини</a>
         <a href="{{ route('news.admin') }}">Керування новинами</a>
         <a href="{{ route('stats.pages') }}">Статистика</a>
