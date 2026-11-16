@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PlayerRequest;
 use App\Models\Country;
 use App\Models\Player;
+use App\Models\Tournament;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class PlayerController extends Controller
 {
@@ -15,6 +17,7 @@ class PlayerController extends Controller
 
         $players = Player::query()
             ->with('country')
+            ->withCount('tournaments')
             ->when($countryCode, function ($query, $countryCode) {
                 $query->where('country_code', $countryCode);
             })
@@ -30,32 +33,42 @@ class PlayerController extends Controller
     public function create()
     {
         $countries = Country::orderBy('name')->get();
+        $tournaments = Tournament::orderBy('name')->pluck('name', 'id');
 
-        return view('players.create', compact('countries'));
+        return view('players.create', compact('countries', 'tournaments'));
     }
 
     public function store(PlayerRequest $request)
     {
-        Player::create($request->validated());
+        $data = $request->validated();
+
+        $player = Player::create(Arr::except($data, ['tournaments']));
+        $player->tournaments()->sync($data['tournaments'] ?? []);
 
         return redirect()->route('players.index');
     }
 
     public function show(Player $player)
     {
+        $player->load('tournaments', 'country');
+
         return view('players.show', compact('player'));
     }
 
     public function edit(Player $player)
     {
         $countries = Country::orderBy('name')->get();
+        $tournaments = Tournament::orderBy('name')->pluck('name', 'id');
 
-        return view('players.edit', compact('player', 'countries'));
+        return view('players.edit', compact('player', 'countries', 'tournaments'));
     }
 
     public function update(PlayerRequest $request, Player $player)
     {
-        $player->update($request->validated());
+        $data = $request->validated();
+
+        $player->update(Arr::except($data, ['tournaments']));
+        $player->tournaments()->sync($data['tournaments'] ?? []);
 
         return redirect()->route('players.index');
     }

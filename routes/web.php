@@ -3,6 +3,7 @@
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\TournamentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -10,6 +11,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::resource('players', PlayerController::class);
+Route::resource('tournaments', TournamentController::class)->except(['show']);
 
 Route::get('/stats', [StatsController::class, 'pages'])->name('stats.pages');
 Route::get('/stats/detail', [StatsController::class, 'detail'])->name('stats.detail');

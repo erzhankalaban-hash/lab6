@@ -13,6 +13,15 @@
         {{ $player->country->name }} ({{ $player->country_code }}, {{ $player->country->phone_code }})
     </p>
 
+    <p>
+        <strong>Турніри ({{ $player->tournaments->count() }}):</strong>
+        @forelse ($player->tournaments as $tournament)
+            <span class="badge">{{ $tournament->name }}</span>
+        @empty
+            <span>Турнірів немає.</span>
+        @endforelse
+    </p>
+
     <p><a href="{{ route('players.edit', $player) }}">Редагувати</a></p>
 
     <form method="POST" action="{{ route('players.destroy', $player) }}"

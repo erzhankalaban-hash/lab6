@@ -20,6 +20,17 @@ class PlayerRequest extends FormRequest
             'birth_date'   => ['required', 'date', 'before:today'],
             'phone'        => ['required', 'string', 'max:20', 'regex:/^\+?[0-9]{7,15}$/'],
             'country_code' => ['required', 'string', 'size:2', 'exists:country,code'],
+
+            'tournaments'   => ['sometimes', 'array'],
+            'tournaments.*' => ['integer', 'distinct', 'exists:tournaments,id'],
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'tournaments'   => 'турніри',
+            'tournaments.*' => 'турнір',
         ];
     }
 }

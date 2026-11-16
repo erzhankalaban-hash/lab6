@@ -30,6 +30,7 @@
             <th>Позиція</th>
             <th>Країна</th>
             <th>Телефон</th>
+            <th>Турнірів</th>
             <th>Дії</th>
         </tr>
         </thead>
@@ -44,6 +45,7 @@
                 <td>{{ $player->position }}</td>
                 <td>{{ $player->country->name }} ({{ $player->country_code }})</td>
                 <td>{{ $player->phone }}</td>
+                <td>{{ $player->tournaments_count }}</td>
                 <td>
                     <a href="{{ route('players.edit', $player) }}">Редагувати</a>
                     <form method="POST" action="{{ route('players.destroy', $player) }}" class="inline"
@@ -56,7 +58,7 @@
             </tr>
         @empty
             <tr>
-                <td colspan="7">Гравців не знайдено.</td>
+                <td colspan="8">Гравців не знайдено.</td>
             </tr>
         @endforelse
         </tbody>
